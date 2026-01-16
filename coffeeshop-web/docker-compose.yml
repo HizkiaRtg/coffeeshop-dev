@@ -1,0 +1,36 @@
+# ===================================
+# Docker Compose untuk CoffeeShop
+# ===================================
+# Cara pakai:
+#   docker-compose up -d --build    (build & jalankan)
+#   docker-compose down              (stop)
+#   docker-compose logs -f           (lihat log)
+
+version: "3.8"
+
+services:
+  # ===== Website + APK Hosting =====
+  coffeeshop-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coffeeshop-website
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    # Volume untuk APK (opsional - bisa update tanpa rebuild)
+    volumes:
+      - ./public/downloads:/app/public/downloads:ro
+# ===================================
+# CARA UPDATE APK:
+# ===================================
+# 1. Ganti file APK di folder: public/downloads/
+# 2. Update versi di: src/data/products.ts (appInfo)
+# 3. Rebuild: docker-compose up -d --build
+#
+# Atau kalau pakai volume (lebih mudah):
+# 1. Ganti file APK di folder: public/downloads/
+# 2. Restart: docker-compose restart
+# ===================================

@@ -1,0 +1,85 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+package-lock.json
+
+# Build
+.next/
+out/
+build/
+dist/
+*.js.map
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Flutter App
+coffeshop-app/.dart_tool/
+coffeshop-app/.packages
+coffeshop-app/build/
+coffeshop-app/.flutter-plugins
+coffeshop-app/.flutter-plugins-dependencies
+coffeshop-app/.pub-cache/
+coffeshop-app/.pub/
+coffeshop-app/pubspec.lock
+
+# Flutter Android
+coffeshop-app/android/.gradle/
+coffeshop-app/android/local.properties
+coffeshop-app/android/app/build/
+coffeshop-app/android/build/
+
+# Flutter iOS
+coffeshop-app/ios/Pods/
+coffeshop-app/ios/.symlinks/
+coffeshop-app/ios/Flutter/Flutter.framework
+coffeshop-app/ios/Flutter/Flutter.podspec
+coffeshop-app/ios/Flutter/Generated.xcconfig
+coffeshop-app/ios/Flutter/flutter_export_environment.sh
+coffeshop-app/ios/Flutter/ephemeral/
+coffeshop-app/ios/Runner.xcworkspace/xcshareddata/
+coffeshop-app/ios/Runner.xcodeproj/xcuserdata/
+coffeshop-app/ios/Runner.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Flutter other platforms
+coffeshop-app/linux/flutter/
+coffeshop-app/macos/Flutter/
+coffeshop-app/windows/flutter/
+coffeshop-app/web/
+
+# Gradle
+.gradle/
+local.properties
+
+# Misc
+*.tmp
+*.temp
+coverage/
+*.lock
+
+# Keep these
+!.gitignore
+coverage/
+
+# Keep package-lock.json (remove from ignore)
+!package-lock.json

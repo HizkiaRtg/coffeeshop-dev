@@ -1,0 +1,51 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Flutter
+.flutter-plugins
+.flutter-plugins-dependencies
+.dart_tool/flutter_build/
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# Application-specific
+key.properties
+*.jks
+
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# iOS Flutter generated files (contains local paths)
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/ephemeral/
+ios/.symlinks/
+ios/Pods/
+
+# Android local properties
+android/local.properties

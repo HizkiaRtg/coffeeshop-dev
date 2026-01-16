@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: coffeeshop
+  labels:
+    app.kubernetes.io/name: coffeeshop
+    app.kubernetes.io/managed-by: kubectl

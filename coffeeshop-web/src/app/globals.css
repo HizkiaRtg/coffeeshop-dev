@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --primary: #3183B5;
+  --secondary: #F8F7FF;
+  --dark: #0E0D18;
+  --grey: #80869A;
+  --lightgrey: #EEDEF0;
+  --error: #FB7181;
+  --success: #53D1B6;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background-color: #ffffff;
+  color: var(--dark);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2670a0;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation classes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+/* Gradient background */
+.gradient-bg {
+  background: linear-gradient(135deg, #364955 0%, #656667 100%);
+}
+
+.gradient-primary {
+  background: linear-gradient(135deg, #3183B5 0%, #53D1B6 100%);
+}
