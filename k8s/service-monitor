@@ -1,0 +1,40 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: coffeeshop-web-metrics
+  namespace: coffeeshop
+  labels:
+    app: coffeeshop-web
+    monitoring: enabled
+spec:
+  selector:
+    matchLabels:
+      app: coffeeshop-web
+  endpoints:
+    - port: http
+      interval: 30s
+      path: /api/metrics
+      scheme: http
+      honorLabels: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coffeeshop-web-metrics
+  namespace: coffeeshop
+  labels:
+    app: coffeeshop-web
+    monitoring: enabled
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3000"
+    prometheus.io/path: "/api/metrics"
+spec:
+  type: ClusterIP
+  selector:
+    app: coffeeshop-web
+  ports:
+    - name: metrics
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
