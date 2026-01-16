@@ -74,11 +74,24 @@ RUN flutter build web --release
 # Stage 2: Create the runtime image with a web server
 FROM nginx:1.25-alpine AS runtime
 
+# Create non-root user for enhanced security
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -S -D -H -u 1001 -s /sbin/nologin -G appgroup appuser
+
 # Copy the web build output from the build stage
 COPY --from=build /app/build/web /usr/share/nginx/html
 
 # Copy the APK from the build stage to a location for easy retrieval
 COPY --from=build /app/build/app/outputs/flutter-apk/app-release.apk /usr/share/nginx/html/app-release.apk
+
+# Set proper permissions for security
+RUN chown -R appuser:appgroup /usr/share/nginx/html && \
+    chown -R appuser:appgroup /var/cache/nginx && \
+    chown -R appuser:appgroup /var/log/nginx && \
+    chown -R appuser:appgroup /etc/nginx/conf.d
+    
+# Switch to non-root user
+USER appuser
 
 # Expose port 80 for the web server
 EXPOSE 80
