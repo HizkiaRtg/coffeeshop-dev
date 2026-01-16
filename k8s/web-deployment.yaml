@@ -17,6 +17,10 @@ spec:
         app: coffeeshop-web
         version: v1
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
       containers:
         - name: coffeeshop-web
           image: coffeeshop-web:latest
@@ -24,6 +28,7 @@ spec:
           ports:
             - containerPort: 3000
               protocol: TCP
+              name: http
           env:
             - name: NODE_ENV
               value: "production"
@@ -31,27 +36,48 @@ spec:
               value: "3000"
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: "256Mi"
+              cpu: "200m"
+              ephemeral-storage: "500Mi"
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "1Gi"
+              cpu: "1000m"
+              ephemeral-storage: "1Gi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/health
               port: 3000
-            initialDelaySeconds: 30
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /api/ready
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
-          readinessProbe:
+            successThreshold: 1
+          startupProbe:
             httpGet:
-              path: /
+              path: /api/health
               port: 3000
-            initialDelaySeconds: 5
+              scheme: HTTP
+            initialDelaySeconds: 10
             periodSeconds: 5
-            timeoutSeconds: 3
-            failureThreshold: 3
+            timeoutSeconds: 5
+            failureThreshold: 10
       restartPolicy: Always
 ---
 apiVersion: v1
