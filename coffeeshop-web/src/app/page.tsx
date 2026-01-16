@@ -136,6 +136,92 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Customer Reviews Section */}
+      <section className="bg-white py-14 md:py-20">
+        <div className="px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#0E0D18] mb-4">
+              What Our Customers Say
+            </h2>
+            <p className="text-[#80869A] max-w-2xl mx-auto">
+              Join thousands of satisfied customers who love our coffee and service
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Review 1 */}
+            <div className="bg-[#F8F7FF] p-6 rounded-xl">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#3183B5] to-[#2a6fa0] rounded-full flex items-center justify-center text-white font-bold mr-4">
+                  A
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#0E0D18]">Andi Pratama</h4>
+                  <div className="flex text-yellow-500 text-sm">
+                    {"★".repeat(5)}
+                  </div>
+                </div>
+              </div>
+              <p className="text-[#80869A] text-sm leading-relaxed">
+                "Kopi terbaik yang pernah saya coba! Rasanya authentic dan pelayanannya super ramah. App-nya juga mudah digunakan untuk order."
+              </p>
+            </div>
+
+            {/* Review 2 */}
+            <div className="bg-[#F8F7FF] p-6 rounded-xl">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#3183B5] to-[#2a6fa0] rounded-full flex items-center justify-center text-white font-bold mr-4">
+                  S
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#0E0D18]">Sarah Dewi</h4>
+                  <div className="flex text-yellow-500 text-sm">
+                    {"★".repeat(5)}
+                  </div>
+                </div>
+              </div>
+              <p className="text-[#80869A] text-sm leading-relaxed">
+                "Favorit banget sama menu-menu inovatif mereka! Apalagi promo-promonya menggiurkan. Pasti balik lagi!"
+              </p>
+            </div>
+
+            {/* Review 3 */}
+            <div className="bg-[#F8F7FF] p-6 rounded-xl">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#3183B5] to-[#2a6fa0] rounded-full flex items-center justify-center text-white font-bold mr-4">
+                  R
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[#0E0D18]">Rudi Santoso</h4>
+                  <div className="flex text-yellow-500 text-sm">
+                    {"★".repeat(5)}
+                  </div>
+                </div>
+              </div>
+              <p className="text-[#80869A] text-sm leading-relaxed">
+                "Tempat nongkrong favorit! Suasananya cozy banget dan kopinya selalu konsisten. Highly recommended!"
+              </p>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-6 mt-12 pt-12 border-t border-gray-100">
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-bold text-[#3183B5] mb-1">4.8★</div>
+              <p className="text-[#80869A] text-sm">Average Rating</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-bold text-[#3183B5] mb-1">50K+</div>
+              <p className="text-[#80869A] text-sm">Happy Customers</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-bold text-[#3183B5] mb-1">25K+</div>
+              <p className="text-[#80869A] text-sm">App Downloads</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Download CTA Section */}
       <section className="gradient-bg py-20 md:py-28">
         <div className="px-6 sm:px-10 lg:px-12 max-w-7xl mx-auto text-center">
