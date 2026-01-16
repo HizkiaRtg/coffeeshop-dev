@@ -1,0 +1,45 @@
+# Flutter build outputs
+build/
+.dart_tool/
+
+# Dependencies dan cache
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+README.md
+instruction.md
+step-dockerize.md
+flutter-version.md
+
+# Test files
+test/
+
+# Android signing (akan di-mount sebagai secret)
+android/app/upload-keystore.jks
+android/app/key.properties
+
+# Analysis
+analysis_options.yaml
+
+# Miscellaneous
+*.log
+*.tmp
+*.temp
