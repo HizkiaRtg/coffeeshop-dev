@@ -1,0 +1,185 @@
+name: Flutter Mobile CI/CD
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'coffeshop-app/**'
+      - '.github/workflows/flutter-ci-cd.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'coffeshop-app/**'
+
+env:
+  FLUTTER_VERSION: '3.27.3'
+
+jobs:
+  analyze:
+    name: Analyze & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+
+      - name: Install dependencies
+        working-directory: coffeshop-app
+        run: flutter pub get
+
+      - name: Verify the install
+        working-directory: coffeshop-app
+        run: flutter doctor -v
+
+      - name: Analyze project source
+        working-directory: coffeshop-app
+        run: flutter analyze
+
+      - name: Run widget tests
+        working-directory: coffeshop-app
+        run: flutter test
+
+      - name: Check formatting
+        working-directory: coffeshop-app
+        run: dart format --output=none --set-exit-if-changed .
+
+  build-web:
+    name: Build Web Release
+    runs-on: ubuntu-latest
+    needs: analyze
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+
+      - name: Install dependencies
+        working-directory: coffeshop-app
+        run: flutter pub get
+
+      - name: Enable Flutter web
+        run: flutter config --enable-web
+
+      - name: Build web release
+        working-directory: coffeshop-app
+        run: flutter build web --release
+
+      - name: Upload web build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-web-build
+          path: coffeshop-app/build/web/
+          retention-days: 30
+
+  build-apk:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    needs: analyze
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install dependencies
+        working-directory: coffeshop-app
+        run: flutter pub get
+
+      - name: Generate signing key (for demo only)
+        working-directory: coffeshop-app
+        run: |
+          if [ ! -f android/app/upload-keystore.jks ]; then
+            keytool -genkey -v -keystore android/app/upload-keystore.jks \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -alias upload -storepass android -keypass android \
+              -dname "CN=Demo, OU=Demo, O=Demo, L=Demo, ST=Demo, C=US"
+            echo "storeFile=upload-keystore.jks" > android/app/key.properties
+            echo "keyAlias=upload" >> android/app/key.properties
+            echo "storePassword=android" >> android/app/key.properties
+            echo "keyPassword=android" >> android/app/key.properties
+          fi
+
+      - name: Build APK release
+        working-directory: coffeshop-app
+        run: flutter build apk --release
+
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-apk-build
+          path: coffeshop-app/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
+
+  docker-flutter:
+    name: Build Flutter Docker Image
+    runs-on: ubuntu-latest
+    needs: [build-web, build-apk]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download web artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: flutter-web-build
+          path: coffeshop-app/build/web/
+
+      - name: Download APK artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: flutter-apk-build
+          path: coffeshop-app/build/app/outputs/flutter-apk/
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/coffeeshop-app
+          tags: |
+            type=sha,prefix=
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./coffeshop-app
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
